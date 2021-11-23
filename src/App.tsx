@@ -1,6 +1,8 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+
+import React from 'react';
+
+import logo from './logo.svg';
 
 function App() {
   return (
@@ -16,11 +18,11 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Learn Palko, you are great one!!!
         </a>
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
