@@ -1,27 +1,24 @@
-import './App.css';
-
 import React from 'react';
 
-import logo from './logo.svg';
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+} from 'react-router-dom';
+
+import { Example } from './screens/Example';
+import { FileToImage } from './screens/FileToImage';
+import { MarkdownEditor } from './screens/MarkdownEditor';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Palko, you are great one!!!
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<FileToImage />} />
+        <Route path="/palko" element={<Example />} />
+        <Route path="/editor" element={<MarkdownEditor />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

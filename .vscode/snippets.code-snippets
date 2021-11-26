@@ -1,0 +1,593 @@
+{
+  // https://github.com/Microsoft/vscode/issues/8102#issuecomment-423476360
+  // https://code.visualstudio.com/docs/editor/userdefinedsnippets
+
+  // imports
+  "import default": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "impd",
+    "body": "import ${2:moduleName} from '${1:module}'$0",
+    "description": "default import"
+  },
+  "import named": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "impn",
+    "body": "import { ${2:imports} } from '${1:module}'$0",
+    "description": "named import"
+  },
+  "export default": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "expd",
+    "body": "export default $1",
+    "description": "default export"
+  },
+  "export named": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "expn",
+    "body": "export { $1 }",
+    "description": "named export"
+  },
+
+  // console logs
+  "console log": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "clg",
+    "body": "console.log($1)",
+    "description": "Log output to console"
+  },
+  "console dir": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "cdir",
+    "body": "console.dir($1)",
+    "description": "Log output to console (dir)"
+  },
+  "console log object": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "clo",
+    "body": "console.log('${1:object}', ${1:object})",
+    "description": "Logs named object to console."
+  },
+
+  // file name
+  "file name": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "fname",
+    "body": "${TM_FILENAME_BASE/(.*)\\..+$/$1/}",
+    "description": "insert name of the current file"
+  },
+
+  // clasic funtions
+  "js function": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "fun",
+    "body": ["const ${1:functionName} = (${2:params}) => {", "\t$3", "}"],
+    "description": "javascript function"
+  },
+  "js function with object param": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "funop",
+    "body": [
+      "type T${2}Options = {",
+      "\t$3",
+      "}",
+      "",
+      "const ${1:functionName} = ({ ${4:params} }: T${2}Options) => {",
+      "\t$5",
+      "}"
+    ],
+    "description": "javascript function with an object param"
+  },
+
+  // TS types
+  "type": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "tp",
+    "body": ["type T${1:Name} = {", "\t$2", "}"],
+    "description": "type"
+  },
+  "type one line": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "tp1l",
+    "body": "type T${1:Name} = ${2}",
+    "description": "one line type"
+  },
+
+  // JS destructure
+  "object destructure": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "desto",
+    "body": "const { ${2:variables} } = ${1:object}",
+    "description": "object destructure"
+  },
+  "array destructure": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "desta",
+    "body": "const [${2:variables}] = ${1:array}",
+    "description": "array destructure"
+  },
+
+  // JS array methods
+  "js array map": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "amap",
+    "body": ["const ${1:newArray} = ${2:oldArray}.map((${3:params}) => {", "\treturn $4", "})"],
+    "description": "javascript array.map"
+  },
+  "js array filter": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "afilt",
+    "body": ["const ${1:newArray} = ${2:oldArray}.filter((${3:params}) => {", "\treturn $4", "})"],
+    "description": "javascript array.filter"
+  },
+  "js array reduce": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "ared",
+    "body": [
+      "const ${1:newVariable} = ${2:oldArray}.reduce((${3:acc}, ${5:params}) => {",
+      "\treturn $6",
+      "}, ${4:accInit})"
+    ],
+    "description": "javascript array.reduce"
+  },
+  "js array forEach": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "afoe",
+    "body": ["${1:array}.forEach((${2:params}) => {", "\t$3", "})"],
+    "description": "javascript array.forEach"
+  },
+
+  "promise": {
+    "scope": "javascript,typescript,typescriptreact",
+    "prefix": "prom",
+    "body": ["return new Promise((resolve, reject) => {", "\t${1}", "})"],
+    "description": "creates and returns a new Promise"
+  },
+
+  // React
+  "import react": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "impr",
+    "body": "import React from 'react'$0",
+    "description": "import React"
+  },
+
+  // React basic hooks
+  "react useState": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "ustate",
+    "body": "const [${1:state}, set${1/(.*)/${1:/capitalize}/}] = React.useState(${3:initialState})",
+    "description": "React.useState"
+  },
+  "react useState typed": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "usttate",
+    "body": "const [${1:state}, set${1/(.*)/${1:/capitalize}/}] = React.useState<${2:TType}>(${3:initialState})",
+    "description": "React.useState with type"
+  },
+  "react useRef": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "uref",
+    "body": "const ref${1:name} = React.useRef<${2:TType}>(${3:initialState})",
+    "description": "React.useRef"
+  },
+  "react useEffect": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "ueffect",
+    "body": ["React.useEffect(() => {", "\t${1}", "}, [${2:dependencies}])"],
+    "description": "React.useEffect"
+  },
+  "react useEffect async": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "uefas",
+    "body": [
+      "React.useEffect(() => {",
+      "\tconst ${1:functionName} = async () => {",
+      "\t\t${2}",
+      "\t}",
+      "\t",
+      "\t${1:functionName}()",
+      "}, [${3:dependencies}])"
+    ],
+    "description": "React.useEffect async"
+  },
+  "react useCallback": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "ucback",
+    "body": ["React.useCallback((${1:props}) => {", "\t${2}", "}, [${3:dependencies}])"],
+    "description": "React.useCallback"
+  },
+  "react useCallback typed": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "ucbt",
+    "body": [
+      "React.useCallback(({ ${2:props} }: ${1:TOptionType}) => {",
+      "\t${3}",
+      "}, [${4:dependencies}])"
+    ],
+    "description": "React.useCallback with typed options"
+  },
+  "react useMemo": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "umemo",
+    "body": [
+      "const ${1:variable} = React.useMemo(() => {",
+      "\treturn ${2}",
+      "}, [${3:dependencies}])"
+    ],
+    "description": "React.useMemo"
+  },
+  // TODO: refine / add reducer function template
+  "react useReducer": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "ureducer",
+    "body": [
+      "const [${1:state}, ${2:dispatch}] = React.useReducer(${3:reducer}, ${4:initialState}, ${5:init})"
+    ],
+    "description": "React.useReducer"
+  },
+
+  // React custom hook
+  "react hook": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "chook",
+    "body": [
+      "import React from 'react'",
+      "",
+      "export const ${1:$TM_FILENAME_BASE} = () => {",
+      "\t$2",
+      "}"
+    ],
+    "description": "custom react hook"
+  },
+  "react hook with options": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "cthook",
+    "body": [
+      "import React from 'react'",
+      "",
+      "type TOptions = {",
+      "\t${2:options}",
+      "}",
+      "",
+      "export const ${1:$TM_FILENAME_BASE} = ({ ${3:options} }: TOptions) => {",
+      "\t$4",
+      "}"
+    ],
+    "description": "custom react hook with typed options"
+  },
+
+  // react components
+  "react functional component with no props": {
+    "scope": "typescriptreact",
+    "prefix": "fcnoprop",
+    "body": [
+      "import React from 'react'",
+      "",
+      "type TProps = NoChildren",
+      "",
+      "export const ${1:$TM_FILENAME_BASE}: React.FC<TProps> = () => {",
+      "\treturn (",
+      "\t\t$2",
+      "\t)",
+      "}",
+      ""
+    ],
+    "description": "React functional component without props"
+  },
+  "react functional component with no children": {
+    "scope": "typescriptreact",
+    "prefix": "fcnochild",
+    "body": [
+      "import React from 'react'",
+      "",
+      "type TProps = NoChildren & {",
+      "\t${2}",
+      "}",
+      "",
+      "export const ${1:$TM_FILENAME_BASE}: React.FC<TProps> = ({ ${3:props} }) => {",
+      "\t$5",
+      "\t",
+      "\treturn (",
+      "\t\t$4",
+      "\t)",
+      "}",
+      ""
+    ],
+    "description": "React functional component without children"
+  },
+  "react functional component with children": {
+    "scope": "typescriptreact",
+    "prefix": "fcwchildren",
+    "body": [
+      "import React from 'react'",
+      "",
+      "type TProps = React.PropsWithChildren<{",
+      "\t${2}",
+      "}>",
+      "",
+      "export const ${1:$TM_FILENAME_BASE}: React.FC<TProps> = ({ children, ${3:props} }) => {",
+      "\t$5",
+      "\t",
+      "\treturn (",
+      "\t\t$4",
+      "\t)",
+      "}",
+      ""
+    ],
+    "description": "React functional component with children"
+  },
+
+  // emotion
+  "emotion styled import": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "impems",
+    "body": "import styled from '@emotion/styled'",
+    "description": "import styled from emotion"
+  },
+  "emotion css import": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "impemc",
+    "body": "import { css } from '@emotion/react'",
+    "description": "import css from emotion"
+  },
+
+  "emotion styled element": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "sel",
+    "body": ["const Styled${1:$TM_FILENAME_BASE} = styled.${2:div}`", "\t$3", "`", ""],
+    "description": "emotion styled element"
+  },
+  "emotion styled component": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "scomp",
+    "body": ["const Styled${1:$TM_FILENAME_BASE} = styled(${2:ComponentName})`", "\t$3", "`", ""],
+    "description": "emotion styled component"
+  },
+
+  "emotion styled/css prop": {
+    "scope": "css",
+    "prefix": "sprop",
+    "body": ["${({$1}) => ($1$2)}"],
+    "description": "emotion styled/css prop"
+  },
+  "emotion styled/css theme prop": {
+    "scope": "css",
+    "prefix": "stprop",
+    "body": ["${({ theme }) => (theme.$1)}${0}"],
+    "description": "emotion styled/css prop.theme"
+  },
+  "media breakpoint": {
+    "scope": "css",
+    "prefix": "mbreak",
+    "body": ["@media only screen and $1 {", "\t$2", "}"],
+    "description": "media breakpoint"
+  },
+
+  // before storybook, there might be time to explain some advanced stuff:
+
+  // *
+  // ${TM_FILENAME_BASE/(.*)\\..+$/$1/}
+  //    - TM_FILENAME_BASE  get the file name without last extension (Text, Text.stories, ...)
+  //    - (.*)              save into into regex var...
+  //    - \\..+$            ...only whatever is before first dot (-> get rid of the .stories)
+  //    - $1                instead of the file name, print the transformed value (Text)
+
+  // *
+  // ${TM_FILENAME_BASE/([A-Z])(.*)\\..+$/${1:/downcase}${2}/} – same as above, until...
+  //    - TM_FILENAME_BASE  get the file name without last extension (Text, Text.stories, ...)
+  //    - ([A-Z])           save the first (upper case) letter into the regers var 1
+  //    - (.*)              save the rest of the file name into into regex var 2...
+  //    - \\..+$            ...but only whatever is before first dot (-> get rid of the .stories)
+  //    - ${1:/downcase}    transform the first letterto lower case
+  //    - ${2}    .         add the rest of the file name as is
+
+  // *
+  // ${1|Design System|Guides|UI|}
+  //    - |Design System|Guides|UI|   predent select box with these values instead of default text input
+
+  // *
+  // `${2/, /` | `/g}`
+  //    - 2                 use second user input
+  //    - /, /              find all comas followed by a space
+  //    - ` | `             replace them with ` | `
+  //  =>> writing "a, b" looks thanks to the wrapping ` like `a, b` and it all gets transformed into `a` | `b` – string enum type!
+
+  // *
+  // "\t\t${2/, /: {\n\t\t\t\n\t\t},\n\t\t/g}: {",
+  // "\t\t\t",
+  // "\t\t}",
+  //    - 2                             use second user input
+  //    - /, /                          find all comas followed by a space
+  //    - : {\n\t\t\t\n\t\t},\n\t\t     replace them with : {
+  //                                                          (cursor)
+  //                                                        },
+  //                                                        (cursor)
+  //    - : {",
+  //      "\t\t\t",
+  //      "\t\t},",                     add : {
+  //                                            (cursor)
+  //                                          },
+  //                                    behind the (last) input
+  //  =>> writing "a, b" will end as a: {
+  //                                   (cursor)
+  //                                 },
+  //                                 b: {
+  //                                   (cursor)
+  //                                 },
+  //      which is exactly the structure we need inside template stories!
+
+  // Storybook
+  "storybook component import": {
+    "scope": "typescriptreact",
+    "prefix": "sbimpcomp",
+    "body": "import { ${TM_FILENAME_BASE/(.*)\\..+$/$1/} } from './${TM_FILENAME_BASE/(.*)\\..+$/$1/}'",
+    "description": "import component for the stories"
+  },
+  "storybook base meta": {
+    "scope": "typescriptreact",
+    "prefix": "sbmetabase",
+    "body": [
+      "import { TStoryMetaOf } from '~ui/storybook/typings'",
+      "",
+      "import { ${TM_FILENAME_BASE/(.*)\\..+$/$1/} } from './${TM_FILENAME_BASE/(.*)\\..+$/$1/}'",
+      "",
+      "const ${TM_FILENAME_BASE/([A-Z])(.*)\\..+$/${1:/downcase}${2}/}Meta: TStoryMetaOf<typeof ${TM_FILENAME_BASE/(.*)\\..+$/$1/}> = {",
+      "\ttitle: `${1|Design System,Guides,UI|}/${2:...Folders}/${TM_FILENAME_BASE/(.*)\\..+$/$1/},`",
+      "\tcomponent: ${TM_FILENAME_BASE/(.*)\\..+$/$1/},",
+      "}",
+      "",
+      "export default ${TM_FILENAME_BASE/(.*)\\..+$/${1:/downcase}/}Meta",
+      ""
+    ],
+    "description": "base Storybook meta info"
+  },
+  // I think this calls for some explaining:
+  "storybook full meta": {
+    "scope": "typescriptreact",
+    "prefix": "sbmetafull",
+    "body": [
+      "import { TStoryMetaOf } from '~ui/storybook/typings'",
+      "import { storyControls } from '~ui/storybook/utils/controls'",
+      "import { storyDefaults } from '~ui/storybook/utils/defaults'",
+      "import { templateStories } from '~ui/storybook/utils/storyFactories'",
+      "import { colors } from '~ui/styleGuide/colors'",
+      "import { spaces } from '~ui/styleGuide/spaces'",
+      "",
+      "import { ${TM_FILENAME_BASE/(.*)\\..+$/$1/} } from './${TM_FILENAME_BASE/(.*)\\..+$/$1/}'",
+      "",
+      "const ${TM_FILENAME_BASE/([A-Z])(.*)\\..+$/${1:/downcase}${2}/}Meta: TStoryMetaOf<typeof ${TM_FILENAME_BASE/(.*)\\..+$/$1/}> = {",
+      "\ttitle: `${2|Design System,Guides,UI|}/${3:...Folders}/${TM_FILENAME_BASE/(.*)\\..+$/$1/}`,",
+      "\tcomponent: ${TM_FILENAME_BASE/(.*)\\..+$/$1/},",
+      "\targTypes: {",
+      "\t\t${6}",
+      "\t},",
+      "\targs: {",
+      "\t\t${7}",
+      // wrapping all of the params in a ${4} so we can delete them if not needed (+ one line to align after delete)
+      "\t},${4:",
+      "\tparameters: {",
+      "\t\t${8}",
+      // wrapping all of the decorators in a ${5} so we can delete them if not needed (+ one line to align after delete)
+      // also need to excape the first } because of 4
+      "\t\\},}${5:",
+      "\tdecorators: [",
+      "\t\t${9}",
+      "\t],}",
+      "}",
+      "",
+      "export default ${TM_FILENAME_BASE/([A-Z])(.*)\\..+$/${1:/downcase}${2}/}Meta",
+      "",
+      "$0"
+    ],
+    "description": "full Storybook meta info. just wow"
+  },
+  "storybook template with stories": {
+    "scope": "typescriptreact",
+    "prefix": "sbtemp",
+    "body": [
+      "type T${1:Story}Names = `${2/, /` | `/g}`",
+      "",
+      "const { ${2} } = templateStories<typeof ${TM_FILENAME_BASE/(.*)\\..+$/$1/}, T${1:Story}Names>({",
+      "\ttemplate: (args) => (${3:<${TM_FILENAME_BASE/(.*)\\..+$/$1/} {...args\\} />}),",
+      "\tstories: {",
+      "\t\t${2/, /: {\n\t\t\t\n\t\t},\n\t\t/g}: {",
+      "\t\t\t",
+      "\t\t},",
+      "\t},",
+      "})",
+      "",
+      "export { ${2} } ",
+      "",
+      "$0"
+    ],
+    "description": "Storybook template with stories"
+  },
+  // TODO: MDX
+
+  // Gql
+  "gql query": {
+    "scope": "graphql",
+    "prefix": "qu",
+    "body": [
+      "query $TM_FILENAME_BASE${1:(${2:params})} {",
+      "\t${6:${7:rename}: }${3:queryName}${4:(${5:params})} {",
+      "\t\tid",
+      "\t\t${8}",
+      "\t}",
+      "}"
+    ],
+    "description": "GraphQL query"
+  },
+  "gql mutation": {
+    "scope": "graphql",
+    "prefix": "mu",
+    "body": [
+      "mutation $TM_FILENAME_BASE(${1:params}) {",
+      "\t${4:${5:rename}: }${2:mutationName}(${3:params}) {",
+      "\t\t${6:id}${0}",
+      "\t}",
+      "}"
+    ],
+    "description": "GraphQL mutation"
+  },
+  "gql subscription": {
+    "scope": "graphql",
+    "prefix": "su",
+    "body": [
+      "subscription $TM_FILENAME_BASE${1:(${2:params})} {",
+      "\t${6:${7:rename}: }${3:subscriptionName}${4:(${5:params})} {",
+      "\t\tid",
+      "\t\t${8}",
+      "\t}",
+      "}"
+    ],
+    "description": "GraphQL subscription"
+  },
+  "gql fragment": {
+    "scope": "graphql",
+    "prefix": "fr",
+    "body": ["fragment $TM_FILENAME_BASE on ${1:GqlType} {", "\t${2:id}${0}", "}"],
+    "description": "GraphQL fragment"
+  },
+
+  // Next
+  // getSSProps
+
+  // XState
+  // "XState machine": {
+  //   "prefix": "xm",
+  //   "body": [
+  //     "import { Machine } from '@xstate/compiled'",
+  //     "",
+  //     "type TContext = {",
+  //     "",
+  //     "}",
+  //     "",
+  //     "type TEvents = {",
+  //     "  type: ''",
+  //     "}",
+  //     "",
+  //     "const initialContext: TContext = {",
+  //     "",
+  //     "}",
+  //     "",
+  //     "export const ${1:$TM_FILENAME_BASE}Machine = Machine<TContext, TEvents, '${1}'>({",
+  //     "  id: '${1}',",
+  //     "  context: initialContext,",
+  //     "  initial: 'idle',",
+  //     "  states: {",
+  //     "    idle: {}",
+  //     "  }",
+  //     "})",
+  //     "// export type TMachineService = InterpreterWithMatches<TMachineContext, any, TMachineEvents, '${1}'>"
+  //   ]
+  // }
+
+  // Comments
+  "doc comment": {
+    "scope": "javascript, typescript, typescriptreact",
+    "prefix": "doc",
+    "body": ["/**", " * ${1}", " */"],
+    "description": "documentation comment"
+  }
+}

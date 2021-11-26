@@ -1,0 +1,44 @@
+{
+  "servers": [{ "url": "https://fullstack.exercise.applifting.cz" }],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Sign in into the application",
+        "security": [{ "ApiKeyAuth": [] }],
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["password"],
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string", "format": "password" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Access token detail",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/AccessToken" } }
+            }
+          },
+          "400": {
+            "description": "Invalid login credentials",
+            "content": {
+              "application/json": {
+                "example": { "code": "INVALID_CREDENTIALS", "message": "Password is invalid" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/ApiKeyInvalidError" }
+        }
+      }
+    }
+  }
+}
