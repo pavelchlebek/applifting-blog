@@ -39,7 +39,7 @@ export const MarkdownEditor: React.FC<TProps> = () => {
       />
       <div style={{ display: "flex", flexDirection: "column", width: "700px" }}>
         <ReactMarkdown className={classes.markdown}>{input}</ReactMarkdown>
-        <p className={classes.markdown}>{input}</p>
+        <pre className={classes.markdown}>{input}</pre>
       </div>
     </div>
   )

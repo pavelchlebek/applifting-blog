@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  margin-bottom: 28px;
 }
 
 .picture {
@@ -62,4 +63,24 @@
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
+}
+
+.link {
+  margin: 0;
+  display: inline-block;
+  margin-right: 19px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.comments {
+  margin: 0;
+  display: inline-block;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #6c757d;
 }
