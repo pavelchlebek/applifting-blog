@@ -2,27 +2,34 @@ import React from 'react';
 
 import axios from 'axios';
 
-import { API } from '../api';
-import { Article } from '../components/Article/Article';
+import { API } from '../../api';
+import { Article } from '../../components/Article/Article';
+import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
 
 type TProps = NoChildren
 
 const style: React.CSSProperties = {
-  padding: "30px",
-  width: "700px",
   alignSelf: "center",
-  backgroundColor: "#ccc",
-  marginLeft: "auto",
-  marginRight: "auto",
+  // backgroundColor: "#ccc",
+  // marginLeft: "auto",
+  // marginRight: "auto",
 }
 
-interface IArticleWithImageSource {
+interface IArticleWithImageId {
   articleId: string
   title: string
   perex: string
   imageId: string
   lastUpdatedAt: string
-  source: string
+  createdAt: string
+}
+interface IArticlesResponse {
+  pagination: {
+    offset: number
+    limit: number
+    total: number
+  }
+  items: IArticleWithImageId[]
 }
 
 const headers = {
@@ -31,14 +38,17 @@ const headers = {
 }
 
 export const ArticlesScreen: React.FC<TProps> = () => {
-  const [articlesList, setArticlesList] = React.useState<IArticleWithImageSource[]>([])
+  const [articlesList, setArticlesList] = React.useState<IArticleWithImageId[]>([])
 
   React.useEffect(() => {
     const getArticles = async () => {
       try {
-        const response = await axios.get(`${API.server}${API.endpoints.ARTICLES}`, {
-          headers: headers,
-        })
+        const response = await axios.get<IArticlesResponse>(
+          `${API.server}${API.endpoints.ARTICLES}`,
+          {
+            headers: headers,
+          }
+        )
         setArticlesList(response.data.items)
       } catch (err) {
         console.log(err)
@@ -47,10 +57,9 @@ export const ArticlesScreen: React.FC<TProps> = () => {
     getArticles()
   }, [])
 
-  console.log(articlesList)
-
   return (
     <div style={style}>
+      <ScreenHeading title="Recent articles" />
       {articlesList &&
         articlesList.map((article) => {
           return (

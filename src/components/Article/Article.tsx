@@ -56,7 +56,6 @@ export const Article: React.FC<TProps> = ({
 
   const getFormattedDate = (date: Date) => {
     const month = date.getMonth() + 1
-    console.log(month)
     const day = date.getDate()
     const year = date.getFullYear().toString().slice(2, 4)
     return `${month}/${day}/${year}`

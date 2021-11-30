@@ -1,0 +1,19 @@
+.wrapper {
+  /* border: 1px solid #ccc; */
+  display: flex;
+}
+
+.text {
+  color: #2b7efb;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  /* padding: 0; */
+  /* background-color: yellow; */
+  margin: 0 10px 0 0;
+}
+
+.arrow {
+  width: 24px;
+  height: 24px;
+}

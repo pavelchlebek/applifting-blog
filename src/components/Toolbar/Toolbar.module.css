@@ -1,0 +1,41 @@
+.toolbar {
+  background-color: #f8f9fa;
+  height: 56px;
+}
+
+.content {
+  width: 1150px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 56px;
+  /* border: 1px solid #ccc; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.leftSection {
+  /* border: 1px solid #ccc; */
+  /* background-color: blue; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rightSection {
+  /* border: 1px solid #ccc; */
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 39px;
+  height: 44px;
+}
+
+.nav {
+  list-style: none;
+  display: flex;
+  /* background-color: yellow; */
+  padding-left: 0;
+}
