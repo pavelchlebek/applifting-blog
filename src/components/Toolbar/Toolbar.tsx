@@ -34,11 +34,11 @@ export const Toolbar: React.FC<TProps> = ({ loggedIn }) => {
                 Create Article
               </NavItem>
             </ul>
-            <LoginButton title="Log out" />
+            <LoginButton onClick={() => console.log("Logging out")} title="Log out" />
           </div>
         ) : (
           <div className={classes.rightSection}>
-            <LoginButton title="Log in" />{" "}
+            <LoginButton onClick={() => console.log("Logging in")} title="Log in" />{" "}
           </div>
         )}
       </div>

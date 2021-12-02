@@ -11,13 +11,6 @@ type TProps = React.PropsWithChildren<{
 }>
 
 export const NavItem: React.FC<TProps> = ({ children, to, color }) => {
-  // const getColor = (option: string) => {
-  //   if (option === "primary") {
-  //     return "#007BFF"
-  //   }
-  //   return "#6C757D"
-  // }
-
   let attachedClasses = classes.navItem
   if (color === "primary") {
     attachedClasses += " " + classes.primary

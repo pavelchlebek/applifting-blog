@@ -11,7 +11,7 @@ export const Screen: React.FC<TProps> = ({ children }) => {
   return (
     <div className={classes.screen}>
       <div className={classes.container}>
-        <Toolbar loggedIn={false} />
+        <Toolbar loggedIn={true} />
         <div className={classes.content}>{children}</div>
       </div>
     </div>

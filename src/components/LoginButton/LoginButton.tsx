@@ -1,17 +1,18 @@
 import React from 'react';
 
-import { ReactComponent as MySvg } from '../../assets/Arrow.svg';
+import { ReactComponent as ArrowSVG } from '../../assets/Arrow.svg';
 import classes from './LoginButton.module.css';
 
 type TProps = NoChildren & {
   title: string
+  onClick: () => void
 }
 
-export const LoginButton: React.FC<TProps> = ({ title }) => {
+export const LoginButton: React.FC<TProps> = ({ title, onClick }) => {
   return (
-    <div className={classes.wrapper}>
+    <div onClick={onClick} className={classes.wrapper}>
       <h5 className={classes.text}>{title}</h5>
-      <MySvg className={classes.arrow} />
+      <ArrowSVG className={classes.arrow} />
     </div>
   )
 }

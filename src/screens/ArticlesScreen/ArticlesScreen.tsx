@@ -1,6 +1,7 @@
 import React from 'react';
 
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 import { API } from '../../api';
 import { Article } from '../../components/Article/Article';
@@ -15,7 +16,7 @@ const style: React.CSSProperties = {
   // marginRight: "auto",
 }
 
-interface IArticleWithImageId {
+export interface IArticleWithImageId {
   articleId: string
   title: string
   perex: string
@@ -23,7 +24,7 @@ interface IArticleWithImageId {
   lastUpdatedAt: string
   createdAt: string
 }
-interface IArticlesResponse {
+export interface IArticlesResponse {
   pagination: {
     offset: number
     limit: number
@@ -40,6 +41,8 @@ const headers = {
 export const ArticlesScreen: React.FC<TProps> = () => {
   const [articlesList, setArticlesList] = React.useState<IArticleWithImageId[]>([])
 
+  const navigate = useNavigate()
+
   React.useEffect(() => {
     const getArticles = async () => {
       try {
@@ -54,8 +57,14 @@ export const ArticlesScreen: React.FC<TProps> = () => {
         console.log(err)
       }
     }
+
     getArticles()
   }, [])
+
+  const goToDetails = (articleId: string) => {
+    const detailUrl = `../article-detail/${articleId}`
+    navigate(detailUrl)
+  }
 
   return (
     <div style={style}>
@@ -70,7 +79,7 @@ export const ArticlesScreen: React.FC<TProps> = () => {
               published={new Date(article.lastUpdatedAt)}
               imageId={article.imageId}
               title={article.title}
-              onClick={() => console.log("going to details of article no: ", article.articleId)}
+              onClick={() => goToDetails(article.articleId)}
             />
           )
         })}
