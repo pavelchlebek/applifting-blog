@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router';
 import { API } from '../../api';
 import { Article } from '../../components/Article/Article';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
+import classes from './ArticlesScreen.module.css';
 
 type TProps = NoChildren
 
@@ -68,7 +69,10 @@ export const ArticlesScreen: React.FC<TProps> = () => {
 
   return (
     <div style={style}>
-      <ScreenHeading title="Recent articles" />
+      <div className={classes.heading}>
+        <ScreenHeading title="Recent articles" />
+      </div>
+
       {articlesList &&
         articlesList.map((article) => {
           return (

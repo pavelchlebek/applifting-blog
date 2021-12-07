@@ -9,6 +9,7 @@ import {
 
 import { API } from '../../api';
 import { ArticleShort } from '../../components/ArticleShort/ArticleShort';
+import { Comment } from '../../components/Comment/Comment';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
 import {
   IArticlesResponse,
@@ -17,8 +18,7 @@ import {
 import classes from './ArticleDetailScreen.module.css';
 
 type TProps = NoChildren
-
-interface IComment {
+export interface IComment {
   commentId: string
   author: string
   content: string
@@ -33,11 +33,10 @@ interface IArticleDetail extends IArticleWithImageId {
 
 const headers = {
   "X-API-KEY": "ba113e43-e68f-4afb-bad5-e73551f3f06f",
-  Authorization: "14ca9347-62d7-41b9-a087-10b916cf6bbe",
+  // Authorization: "Bearer 24fa0512-18a9-4d4e-a980-a28b06ce4753",
 }
 
 export const ArticleDetailScreen: React.FC<TProps> = () => {
-  // TODO params types
   const params = useParams()
   const navigate = useNavigate()
   const articleId = params.articleId
@@ -49,7 +48,7 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
   /**
    * fetching all article information
    * once we have article details, we fetch and read picture file using imageId
-   * once we have downloaded "blob" (the picture) we read it as DataURL, which gives as string to feed the img src attribute
+   * once we have downloaded "blob" (the picture) we read it as DataURL, which gives us string to feed the img src attribute
    */
   React.useEffect(() => {
     const getPicture = async (imageId: string) => {
@@ -119,12 +118,59 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
     navigate(detailUrl)
   }
 
+  const getFormattedDate = (date: Date) => {
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const year = date.getFullYear().toString()
+    return `${month}.${day}.${year}`
+  }
+
+  /**
+   * comments voting functionality
+   */
+  const voteUp = async (commentId: string) => {
+    try {
+      const response = await axios.post<IComment>(
+        `${API.server}${API.endpoints.COMMENTS}/${commentId}/vote/up`,
+        null,
+        {
+          headers: headers,
+        }
+      )
+      // updating score for given comment
+      console.log("updatedScore: ", response.data.score)
+    } catch (err) {
+      console.log("votingUp error: ", err)
+    }
+  }
+
+  const voteDown = async (commentId: string) => {
+    try {
+      const response = await axios.post<IComment>(
+        `${API.server}${API.endpoints.COMMENTS}/${commentId}/vote/down`,
+        null,
+        {
+          headers: headers,
+        }
+      )
+      console.log("updatedScore: ", response.data.score)
+    } catch (err) {
+      console.log("votingUp error: ", err)
+    }
+  }
+
   return (
     <div className={classes.page}>
       {articleDetail && (
         <div className={classes.left}>
           <ScreenHeading title={articleDetail.title} />
-
+          <div className={classes.headerInfo}>
+            <h4 className={classes.author}>Palkin Palisander</h4>
+            <div className={classes.dot}></div>
+            <h4 className={classes.date}>
+              {getFormattedDate(new Date(articleDetail.lastUpdatedAt))}
+            </h4>
+          </div>
           {imageSource ? (
             <img className={classes.image} src={imageSource} alt="Dog or cat" />
           ) : (
@@ -135,21 +181,25 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
             <h4
               className={classes.smallerHeading}
             >{`Comments (${articleDetail.comments.length})`}</h4>
+            {articleDetail.comments.length > 0 && (
+              <div>
+                {articleDetail.comments.map((comment) => {
+                  return (
+                    <Comment
+                      key={comment.commentId}
+                      comment={comment}
+                      onVoteUp={() => voteUp(comment.commentId)}
+                      onVoteDown={() => voteDown(comment.commentId)}
+                    />
+                  )
+                })}
+              </div>
+            )}
           </div>
         </div>
       )}
       <div className={classes.right}>
         <h4 className={classes.smallerHeading + " " + classes.headingRight}>Related articles</h4>
-        {/* <ArticleShort
-          onClick={() => goToArticle("4c680501-1280-4fee-b429-e67068a08c94")}
-          title="How Much Wet Food Should I Feed My Cat?"
-          perex="If you aren’t sure how much wet food you should feed your cat, Purina’s expert nutritionists can help. Plus, they offer guidance on food safety and provide ser"
-        />
-        <ArticleShort
-          onClick={() => goToArticle("5296ca1f-a638-458e-b695-15c94b961846")}
-          title="How Much Wet Food Should I Feed My Cat?"
-          perex="If you aren’t sure how much wet food you should feed your cat, Purina’s expert nutritionists can help. Plus, they offer guidance on food safety and provide ser"
-        /> */}
         {relatedArticles.length > 0 &&
           relatedArticles.map((article) => {
             return (
