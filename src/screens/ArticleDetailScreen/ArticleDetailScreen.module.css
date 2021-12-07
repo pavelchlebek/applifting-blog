@@ -4,6 +4,12 @@
   padding-top: 64px;
 }
 
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 .left {
   flex: 2;
   display: flex;
@@ -71,4 +77,30 @@
   color: #6c757d;
   font-weight: 400;
   margin-left: 12px;
+}
+
+.form {
+  /* height: 80px; */
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  margin-bottom: 28px;
+  box-sizing: border-box;
+}
+
+.newComment {
+  width: 100%;
+  appearance: none;
+}
+
+.sendGroup {
+  display: flex;
+  /* align-items: center; */
+}
+
+.buttonWrapper {
+  margin-left: 28px;
+}
+
+.nameInputWrapper {
+  width: 260px;
 }

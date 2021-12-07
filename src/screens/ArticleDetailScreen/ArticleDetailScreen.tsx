@@ -9,8 +9,10 @@ import {
 
 import { API } from '../../api';
 import { ArticleShort } from '../../components/ArticleShort/ArticleShort';
+import { Button } from '../../components/Button/Button';
 import { Comment } from '../../components/Comment/Comment';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
+import { TextInput } from '../../components/TextInput/TextInput';
 import {
   IArticlesResponse,
   IArticleWithImageId,
@@ -44,6 +46,9 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
   const [articleDetail, setArticleDetail] = React.useState<IArticleDetail>()
   const [imageSource, setImageSource] = React.useState("")
   const [relatedArticles, setRelatedArticles] = React.useState<IArticleWithImageId[]>([])
+
+  const [newComment, setNewComment] = React.useState("")
+  const [commentAuthor, setCommentAuthor] = React.useState("")
 
   /**
    * fetching all article information
@@ -138,7 +143,15 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
         }
       )
       // updating score for given comment
-      console.log("updatedScore: ", response.data.score)
+      if (articleDetail) {
+        const currentComments = [...articleDetail.comments]
+        const filteredComments = currentComments.filter(
+          (comment) => comment.commentId !== commentId
+        )
+        filteredComments.push(response.data)
+        setArticleDetail({ ...articleDetail, comments: filteredComments })
+        // console.log(filteredComments)
+      }
     } catch (err) {
       console.log("votingUp error: ", err)
     }
@@ -153,9 +166,43 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
           headers: headers,
         }
       )
-      console.log("updatedScore: ", response.data.score)
+      // updating score for given comment
+      if (articleDetail) {
+        const currentComments = [...articleDetail.comments]
+        const filteredComments = currentComments.filter(
+          (comment) => comment.commentId !== commentId
+        )
+        filteredComments.push(response.data)
+        setArticleDetail({ ...articleDetail, comments: filteredComments })
+        // console.log(filteredComments)
+      }
+      // console.log("updatedScore: ", response.data.score)
     } catch (err) {
       console.log("votingUp error: ", err)
+    }
+  }
+
+  console.log("newComment: ", newComment)
+  // console.log("author: ", commentAuthor)
+
+  const handleSendComment = async () => {
+    if (newComment.length > 6 && commentAuthor.length > 6) {
+      try {
+        const response = await axios.post(
+          `${API.server}${API.endpoints.COMMENTS}`,
+          {
+            articleId: articleId,
+            author: commentAuthor,
+            content: newComment,
+          },
+          {
+            headers: headers,
+          }
+        )
+        console.log("newCommentResponse: ", response.data)
+      } catch (err) {
+        console.log("Sending comment error: ", err)
+      }
     }
   }
 
@@ -181,6 +228,30 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
             <h4
               className={classes.smallerHeading}
             >{`Comments (${articleDetail.comments.length})`}</h4>
+            <form className={classes.form}>
+              <TextInput
+                placeholder="Join the discussion"
+                value={newComment}
+                onChange={(event) => setNewComment(event.currentTarget.value)}
+              />
+              <div className={classes.sendGroup}>
+                <div className={classes.nameInputWrapper}>
+                  <TextInput
+                    placeholder="Your name"
+                    value={commentAuthor}
+                    onChange={(event) => setCommentAuthor(event.currentTarget.value)}
+                  />
+                </div>
+                <div className={classes.buttonWrapper}>
+                  <Button
+                    style={{ paddingTop: "12px", paddingBottom: "12px" }}
+                    color="primary"
+                    onClick={handleSendComment}
+                    title="Post comment"
+                  />
+                </div>
+              </div>
+            </form>
             {articleDetail.comments.length > 0 && (
               <div>
                 {articleDetail.comments.map((comment) => {
