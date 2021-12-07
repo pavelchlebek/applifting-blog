@@ -15,7 +15,9 @@ type TProps = NoChildren & {
 
 export const Comment: React.FC<TProps> = ({ comment, onVoteUp, onVoteDown }) => {
   const getTimeAgo = (dateString: string) => {
-    return "2 hours ago"
+    const timestamp = new Date(dateString)
+    const hoursAgo = Math.round((Date.now() - timestamp.getTime()) / (3600 * 1000))
+    return `${hoursAgo} hours ago`
   }
 
   const formatScore = (score: number) => {

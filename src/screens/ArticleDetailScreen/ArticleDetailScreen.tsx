@@ -50,6 +50,8 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
   const [newComment, setNewComment] = React.useState("")
   const [commentAuthor, setCommentAuthor] = React.useState("")
 
+  const [inputsValid, setInputsValid] = React.useState(true)
+
   /**
    * fetching all article information
    * once we have article details, we fetch and read picture file using imageId
@@ -133,6 +135,7 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
   /**
    * comments voting functionality
    */
+
   const voteUp = async (commentId: string) => {
     try {
       const response = await axios.post<IComment>(
@@ -156,7 +159,7 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
       console.log("votingUp error: ", err)
     }
   }
-
+  // TODO: one function with parameter (up/down)
   const voteDown = async (commentId: string) => {
     try {
       const response = await axios.post<IComment>(
@@ -182,13 +185,14 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
     }
   }
 
-  console.log("newComment: ", newComment)
-  // console.log("author: ", commentAuthor)
-
+  /**
+   * posting new comment
+   */
   const handleSendComment = async () => {
-    if (newComment.length > 6 && commentAuthor.length > 6) {
+    if (newComment.length > 5 && commentAuthor.length > 5) {
+      setInputsValid(true)
       try {
-        const response = await axios.post(
+        const response = await axios.post<IComment>(
           `${API.server}${API.endpoints.COMMENTS}`,
           {
             articleId: articleId,
@@ -199,12 +203,25 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
             headers: headers,
           }
         )
-        console.log("newCommentResponse: ", response.data)
+        // adding comment from response to comments
+        if (articleDetail) {
+          const currentComments = [...articleDetail.comments]
+          currentComments.push(response.data)
+          setArticleDetail({ ...articleDetail, comments: currentComments })
+        }
+        setNewComment("")
+        setCommentAuthor("")
       } catch (err) {
         console.log("Sending comment error: ", err)
       }
+    } else {
+      setInputsValid(false)
     }
   }
+
+  const sortedComments = articleDetail?.comments.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  })
 
   return (
     <div className={classes.page}>
@@ -252,6 +269,11 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
                 </div>
               </div>
             </form>
+            {!inputsValid && (
+              <div className={classes.alert}>
+                Both your name and your comment must have at least 6 characters!
+              </div>
+            )}
             {articleDetail.comments.length > 0 && (
               <div>
                 {articleDetail.comments.map((comment) => {
