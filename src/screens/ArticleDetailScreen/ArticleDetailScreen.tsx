@@ -7,13 +7,17 @@ import {
   useParams,
 } from 'react-router';
 
-import { API } from '../../api';
+import {
+  API,
+  tenant,
+} from '../../api';
 import { ArticleShort } from '../../components/ArticleShort/ArticleShort';
 import { Button } from '../../components/Button/Button';
 import { Comment } from '../../components/Comment/Comment';
 import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
 import { TextInput } from '../../components/TextInput/TextInput';
+import { useAuthContext } from '../../store/auth-context';
 import {
   IArticlesResponse,
   IArticleWithImageId,
@@ -35,7 +39,7 @@ interface IArticleDetail extends IArticleWithImageId {
 }
 
 const headers = {
-  "X-API-KEY": "ba113e43-e68f-4afb-bad5-e73551f3f06f",
+  "X-API-KEY": tenant.apiKey,
   // Authorization: "24fa0512-18a9-4d4e-a980-a28b06ce4753",
 }
 
@@ -43,6 +47,8 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
   const params = useParams()
   const navigate = useNavigate()
   const articleId = params.articleId
+
+  const authContext = useAuthContext()
 
   const [articleDetail, setArticleDetail] = React.useState<IArticleDetail>()
   const [imageSource, setImageSource] = React.useState("")
@@ -198,6 +204,12 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
       <div className={classes.page}>
         {articleDetail && (
           <div className={classes.left}>
+            {/* <div>{authContext.name}</div> */}
+            {/* <Button
+              color="primary"
+              onClick={() => authContext.setName("Palkooooo")}
+              title="change name"
+            /> */}
             <ScreenHeading title={articleDetail.title} />
             <div className={classes.headerInfo}>
               <h4 className={classes.author}>Palkin Palisander</h4>

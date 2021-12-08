@@ -3,20 +3,17 @@ import React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 
-import { API } from '../../api';
+import {
+  API,
+  tenant,
+} from '../../api';
 import { Article } from '../../components/Article/Article';
 import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
+import { useAuthContext } from '../../store/auth-context';
 import classes from './ArticlesScreen.module.css';
 
 type TProps = NoChildren
-
-const style: React.CSSProperties = {
-  alignSelf: "center",
-  // backgroundColor: "#ccc",
-  // marginLeft: "auto",
-  // marginRight: "auto",
-}
 
 export interface IArticleWithImageId {
   articleId: string
@@ -36,12 +33,15 @@ export interface IArticlesResponse {
 }
 
 const headers = {
-  "X-API-KEY": "ba113e43-e68f-4afb-bad5-e73551f3f06f",
-  Authorization: "14ca9347-62d7-41b9-a087-10b916cf6bbe",
+  "X-API-KEY": tenant.apiKey,
+  // Authorization: "14ca9347-62d7-41b9-a087-10b916cf6bbe",
 }
 
 export const ArticlesScreen: React.FC<TProps> = () => {
   const [articlesList, setArticlesList] = React.useState<IArticleWithImageId[]>([])
+
+  const authContext = useAuthContext()
+  // console.log("Auth Context: ", authContext)
 
   const navigate = useNavigate()
 
@@ -70,7 +70,8 @@ export const ArticlesScreen: React.FC<TProps> = () => {
 
   return (
     <Screen loggedIn={false}>
-      <div style={style}>
+      <div>
+        <div>{authContext.token?.accessToken}</div>
         <div className={classes.heading}>
           <ScreenHeading title="Recent articles" />
         </div>
