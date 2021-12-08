@@ -13,11 +13,43 @@ type TProps = NoChildren & {
   onVoteDown: () => void
 }
 
+const secondsInHour = 3600
+const millisecondsInSecond = 1000
+const secondsInMinute = 60
+const hoursInDay = 24
+const daysInWeek = 7
+const daysInMonth = 30 // approximation -- later in getTimeAgo function we round anyway
+const monthsInYear = 12
+
 export const Comment: React.FC<TProps> = ({ comment, onVoteUp, onVoteDown }) => {
+  // can be put to utility file, in this particular app the function is used only in Comment component, so we leave it here
   const getTimeAgo = (dateString: string) => {
-    const timestamp = new Date(dateString)
-    const hoursAgo = Math.round((Date.now() - timestamp.getTime()) / (3600 * 1000))
-    return `${hoursAgo} hours ago`
+    // adding one hour to match local time
+    const timestamp = new Date(dateString).getTime() + secondsInHour * millisecondsInSecond
+    // counting seconds elapsed till now
+    const secondsAgo = Math.round((Date.now() - timestamp) / 1000)
+
+    if (secondsAgo < secondsInMinute) {
+      return `${secondsAgo} seconds ago` // further we can take care of singular and plural
+    }
+    if (secondsAgo < secondsInHour) {
+      return `${Math.round(secondsAgo / secondsInMinute)} minutes ago`
+    }
+    if (secondsAgo < secondsInHour * hoursInDay) {
+      return `${Math.round(secondsAgo / secondsInHour)} hours ago`
+    }
+    if (secondsAgo < hoursInDay * secondsInHour * daysInWeek) {
+      return `${Math.round(secondsAgo / (hoursInDay * secondsInHour))} days ago`
+    }
+    if (secondsAgo < daysInMonth * hoursInDay * secondsInHour) {
+      return `${Math.round(secondsAgo / (daysInWeek * hoursInDay * secondsInHour))} weeks ago`
+    }
+    if (secondsAgo < monthsInYear * daysInMonth * hoursInDay * secondsInHour) {
+      return `${Math.round(secondsAgo / (daysInMonth * hoursInDay * secondsAgo))} months ago`
+    }
+    return `${Math.round(
+      secondsAgo / (monthsInYear * daysInMonth * hoursInDay * secondsInHour)
+    )} years ago`
   }
 
   const formatScore = (score: number) => {

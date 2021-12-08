@@ -65,3 +65,13 @@
 /* .upContainer {
   background-color: aqua;
 } */
+
+.upContainer,
+.downContainer {
+  cursor: pointer;
+}
+
+.upContainer:hover,
+.downContainer:hover {
+  background-color: #eee;
+}

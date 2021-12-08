@@ -21,26 +21,12 @@ function App() {
         <Route path="/" element={<FileToImage />} />
         <Route path="/articlesTest" element={<ArticlesScreen />} />
         <Route path="/editor" element={<MarkdownEditor />} />
-        <Route
-          path="/articles"
-          element={
-            <Screen>
-              <ArticlesScreen />
-            </Screen>
-          }
-        />
-        <Route
-          path="/article-detail/:articleId"
-          element={
-            <Screen>
-              <ArticleDetailScreen />
-            </Screen>
-          }
-        />
+        <Route path="/articles" element={<ArticlesScreen />} />
+        <Route path="/article-detail/:articleId" element={<ArticleDetailScreen />} />
         <Route
           path="*"
           element={
-            <Screen>
+            <Screen loggedIn={false}>
               <main style={{ padding: "1rem" }}>
                 <p>There's nothing here!</p>
               </main>

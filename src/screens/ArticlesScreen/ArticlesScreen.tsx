@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 
 import { API } from '../../api';
 import { Article } from '../../components/Article/Article';
+import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
 import classes from './ArticlesScreen.module.css';
 
@@ -68,25 +69,31 @@ export const ArticlesScreen: React.FC<TProps> = () => {
   }
 
   return (
-    <div style={style}>
-      <div className={classes.heading}>
-        <ScreenHeading title="Recent articles" />
-      </div>
+    <Screen loggedIn={false}>
+      <div style={style}>
+        <div className={classes.heading}>
+          <ScreenHeading title="Recent articles" />
+        </div>
 
-      {articlesList &&
-        articlesList.map((article) => {
-          return (
-            <Article
-              key={article.articleId}
-              author="Palkin Palisandr"
-              perex={article.perex}
-              published={new Date(article.lastUpdatedAt)}
-              imageId={article.imageId}
-              title={article.title}
-              onClick={() => goToDetails(article.articleId)}
-            />
-          )
-        })}
-    </div>
+        {articlesList &&
+          articlesList
+            .sort(
+              (a, b) => new Date(b.lastUpdatedAt).getTime() - new Date(a.lastUpdatedAt).getTime()
+            )
+            .map((article) => {
+              return (
+                <Article
+                  key={article.articleId}
+                  author="Palkin Palisandr"
+                  perex={article.perex}
+                  published={new Date(article.lastUpdatedAt)}
+                  imageId={article.imageId}
+                  title={article.title}
+                  onClick={() => goToDetails(article.articleId)}
+                />
+              )
+            })}
+      </div>
+    </Screen>
   )
 }

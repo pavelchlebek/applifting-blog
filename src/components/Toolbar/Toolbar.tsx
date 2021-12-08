@@ -27,10 +27,10 @@ export const Toolbar: React.FC<TProps> = ({ loggedIn }) => {
         {loggedIn ? (
           <div className={classes.rightSection}>
             <ul className={classes.nav}>
-              <NavItem to="/articles" color="secondary">
+              <NavItem to="/my-articles" color="secondary">
                 My Articles
               </NavItem>
-              <NavItem to="/articles" color="primary">
+              <NavItem to="/create-article" color="primary">
                 Create Article
               </NavItem>
             </ul>
