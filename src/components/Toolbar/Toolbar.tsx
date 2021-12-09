@@ -1,6 +1,10 @@
 import React from 'react';
 
+import { useNavigate } from 'react-router';
+
+import { tenant } from '../../api';
 import logo from '../../assets/logo.png';
+import { useAuthContext } from '../../store/auth-context';
 import { LoginButton } from '../LoginButton/LoginButton';
 import { NavItem } from '../NavItem/NavItem';
 import classes from './Toolbar.module.css';
@@ -10,6 +14,13 @@ type TProps = NoChildren & {
 }
 
 export const Toolbar: React.FC<TProps> = ({ loggedIn }) => {
+  const navigate = useNavigate()
+  const authContext = useAuthContext()
+
+  const handleLogout = () => {
+    authContext.logout()
+  }
+
   return (
     <div className={classes.toolbar}>
       <div className={classes.content}>
@@ -34,11 +45,11 @@ export const Toolbar: React.FC<TProps> = ({ loggedIn }) => {
                 Create Article
               </NavItem>
             </ul>
-            <LoginButton onClick={() => console.log("Logging out")} title="Log out" />
+            <LoginButton onClick={handleLogout} title={`Log out ${tenant.name}`} />
           </div>
         ) : (
           <div className={classes.rightSection}>
-            <LoginButton onClick={() => console.log("Logging in")} title="Log in" />{" "}
+            <LoginButton onClick={() => navigate("/login")} title="Log in" />{" "}
           </div>
         )}
       </div>

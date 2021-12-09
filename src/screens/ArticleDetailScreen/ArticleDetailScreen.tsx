@@ -169,7 +169,7 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
    * posting new comment
    */
   const handleSendComment = async () => {
-    if (newComment.length > 5 && commentAuthor.length > 5) {
+    if (newComment.length > 3 && commentAuthor.length > 3) {
       setInputsValid(true)
       try {
         const response = await axios.post<IComment>(
@@ -199,8 +199,15 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
     }
   }
 
+  // let loggedIn
+  // if (authContext.token || localStorage.getItem("accessToken")) {
+  //   loggedIn = true
+  // } else {
+  //   loggedIn = false
+  // }
+
   return (
-    <Screen loggedIn={false}>
+    <Screen loggedIn={authContext.token ? true : false}>
       <div className={classes.page}>
         {articleDetail && (
           <div className={classes.left}>
@@ -254,7 +261,7 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
               </form>
               {!inputsValid && (
                 <div className={classes.alert}>
-                  Both your name and your comment must have at least 6 characters!
+                  Both your name and your comment must have at least 4 characters!
                 </div>
               )}
               {articleDetail.comments.length > 0 && (
