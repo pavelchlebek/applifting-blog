@@ -7,6 +7,7 @@ import {
   API,
   tenant,
 } from '../api';
+import { millisecondsInSecond } from '../components/Comment/Comment';
 
 type TAuthContextObject = {
   name: string
@@ -45,13 +46,25 @@ interface ILoginError {
   message: string
 }
 
+// TODO: everything related to "expiresIn" should be renamed to something like "expires" to avoid confusion, now it holds timestamp of token expiration
+// instead of seconds to expiration since the token was issued
 const ACCESS_TOKEN = "accessToken"
 const TOKEN_EXPIRES_IN = "tokenExpiresIn"
 
 const getTokenFromLocalStorage = (): TToken | undefined => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
   const tokenExpiresIn = localStorage.getItem(TOKEN_EXPIRES_IN)
-  if (accessToken && tokenExpiresIn) {
+  // if token is not stale, we are still logged in using the token
+  let tokenValid
+  if (tokenExpiresIn) {
+    const now = new Date().getTime()
+    const tokenValidTimeLeft = parseInt(tokenExpiresIn) - now
+    if (tokenValidTimeLeft > 0) {
+      tokenValid = true
+    }
+  }
+
+  if (accessToken && tokenExpiresIn && tokenValid) {
     return { accessToken: accessToken, expiresIn: parseInt(tokenExpiresIn) }
   }
   return undefined
@@ -83,9 +96,15 @@ export const AuthContextProvider: React.FC = ({ children }) => {
           headers: headers,
         }
       )
-      setToken({ accessToken: response.data.access_token, expiresIn: response.data.expires_in })
+      setToken({
+        accessToken: response.data.access_token,
+        expiresIn: new Date().getTime() + response.data.expires_in * millisecondsInSecond,
+      })
       localStorage.setItem(ACCESS_TOKEN, response.data.access_token)
-      localStorage.setItem(TOKEN_EXPIRES_IN, response.data.expires_in.toString())
+      localStorage.setItem(
+        TOKEN_EXPIRES_IN,
+        (new Date().getTime() + response.data.expires_in * millisecondsInSecond).toString()
+      )
       navigate("/articles")
     } catch (err) {
       if (axios.isAxiosError(err)) {

@@ -13,8 +13,8 @@ type TProps = NoChildren & {
   onVoteDown: () => void
 }
 
-const secondsInHour = 3600
-const millisecondsInSecond = 1000
+export const secondsInHour = 3600
+export const millisecondsInSecond = 1000
 const secondsInMinute = 60
 const hoursInDay = 24
 const daysInWeek = 7
