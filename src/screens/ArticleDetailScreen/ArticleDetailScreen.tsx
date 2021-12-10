@@ -199,13 +199,6 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
     }
   }
 
-  // let loggedIn
-  // if (authContext.token || localStorage.getItem("accessToken")) {
-  //   loggedIn = true
-  // } else {
-  //   loggedIn = false
-  // }
-
   return (
     <Screen loggedIn={authContext.token ? true : false}>
       <div className={classes.page}>

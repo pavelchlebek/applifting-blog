@@ -41,7 +41,7 @@ export const Toolbar: React.FC<TProps> = ({ loggedIn }) => {
               <NavItem to="/my-articles" color="secondary">
                 My Articles
               </NavItem>
-              <NavItem to="/create-article" color="primary">
+              <NavItem to="/new-article" color="primary">
                 Create Article
               </NavItem>
             </ul>

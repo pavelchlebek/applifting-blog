@@ -67,6 +67,9 @@ const getTokenFromLocalStorage = (): TToken | undefined => {
   if (accessToken && tokenExpiresIn && tokenValid) {
     return { accessToken: accessToken, expiresIn: parseInt(tokenExpiresIn) }
   }
+  // if token stale (or missing) removing from localStorage
+  localStorage.removeItem(ACCESS_TOKEN)
+  localStorage.removeItem(TOKEN_EXPIRES_IN)
   return undefined
 }
 
@@ -77,8 +80,6 @@ export const useAuthContext = () => {
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [token, setToken] = React.useState<TToken | undefined>(getTokenFromLocalStorage())
   const [loginError, setLoginError] = React.useState<ILoginError>()
-
-  // setToken(getTokenFromLocalStorage())
 
   const navigate = useNavigate()
 

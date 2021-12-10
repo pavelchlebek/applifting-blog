@@ -8,7 +8,6 @@ import {
   tenant,
 } from '../../api';
 import { Article } from '../../components/Article/Article';
-import { Button } from '../../components/Button/Button';
 import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
 import { useAuthContext } from '../../store/auth-context';
@@ -69,18 +68,9 @@ export const ArticlesScreen: React.FC<TProps> = () => {
     navigate(detailUrl)
   }
 
-  // let loggedIn
-  // if (authContext.token || localStorage.getItem("accessToken")) {
-  //   loggedIn = true
-  // } else {
-  //   loggedIn = false
-  // }
-
   return (
     <Screen loggedIn={authContext.token ? true : false}>
-      <div>
-        <Button color="primary" title="Logout" onClick={() => authContext.logout()} />
-        <div>{authContext.token?.accessToken}</div>
+      <div className={classes.page}>
         <div className={classes.heading}>
           <ScreenHeading title="Recent articles" />
         </div>
