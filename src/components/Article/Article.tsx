@@ -71,7 +71,7 @@ export const Article: React.FC<TProps> = ({
           <div className={classes.dot}></div>
           <h4 className={classes.date}>{getFormattedDate(published)}</h4>
         </div>
-        <p className={classes.perex}>{perex}</p>
+        <p className={classes.perex}>{perex.slice(0, 350) + "..."}</p>
 
         <h5 onClick={onClick} className={classes.link}>
           Read whole article

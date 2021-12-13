@@ -6,6 +6,10 @@
   line-height: 24px;
   cursor: pointer;
   transition: all 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px important!;
 }
 
 .button:hover {

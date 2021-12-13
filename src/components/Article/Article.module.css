@@ -4,7 +4,9 @@
 }
 
 .picture {
-  width: 272px;
+  /* width: 272px; */
+  min-width: 272px;
+  max-width: 272px;
   height: 244px;
   border-radius: 2px;
   margin-right: 24px;

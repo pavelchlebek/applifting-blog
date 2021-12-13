@@ -1,6 +1,7 @@
 import React from 'react';
 
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 import {
   API,
@@ -38,6 +39,8 @@ export const NewArticleScreen: React.FC<TProps> = () => {
   const [image, setImage] = React.useState<File | Blob | undefined>()
   const [imageSource, setImageSource] = React.useState("")
   const [content, setContent] = React.useState("")
+
+  const navigate = useNavigate()
 
   const fileSelectedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -87,7 +90,7 @@ export const NewArticleScreen: React.FC<TProps> = () => {
             headers: headers,
           }
         )
-        console.log(response.data)
+        navigate("/articles")
       } catch (err) {
         console.log("postingArticleError: ", err)
       }

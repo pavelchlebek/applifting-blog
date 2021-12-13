@@ -1,0 +1,28 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.headingRow {
+  display: flex;
+  margin-top: 48px;
+  margin-bottom: 60px;
+  align-items: center;
+}
+
+.buttonWrapper {
+  margin-left: 32px;
+}
+
+.tableHeadingRow {
+  border-bottom: 2px solid #dfdfdf;
+}
+
+.table {
+  border-collapse: collapse;
+}
+
+.table th {
+  /* background-color: aquamarine; */
+  text-align: start;
+}

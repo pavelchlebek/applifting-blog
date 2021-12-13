@@ -14,6 +14,7 @@ import { ArticlesScreen } from './screens/ArticlesScreen/ArticlesScreen';
 import { FileToImage } from './screens/FileToImage';
 import { LoginScreen } from './screens/LoginScreen/LoginScreen';
 import { MarkdownEditor } from './screens/MarkdownEditor';
+import { MyArticlesScreen } from './screens/MyArticlesScreen/MyArticlesScreen';
 import { NewArticleScreen } from './screens/NewArticleScreen/NewArticleScreen';
 import { AuthContextProvider } from './store/auth-context';
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/articles" element={<ArticlesScreen />} />
           <Route path="/article-detail/:articleId" element={<ArticleDetailScreen />} />
           <Route path="/new-article" element={<NewArticleScreen />} />
+          <Route path="/my-articles" element={<MyArticlesScreen />} />
           <Route
             path="*"
             element={
