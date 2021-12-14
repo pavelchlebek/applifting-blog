@@ -33,7 +33,7 @@ export interface IComment {
   score: number
 }
 
-interface IArticleDetail extends IArticleWithImageId {
+export interface IArticleDetail extends IArticleWithImageId {
   content: string
   comments: IComment[]
 }

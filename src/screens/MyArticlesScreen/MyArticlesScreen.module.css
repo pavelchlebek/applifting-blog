@@ -25,4 +25,25 @@
 .table th {
   /* background-color: aquamarine; */
   text-align: start;
+  /* display: flex; */
+}
+
+.headingCell {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+
+.controls {
+  margin-left: 10px;
+}
+
+.table tr {
+  border-bottom: 1px solid #dfdfdf;
+}
+
+.commentsCell {
+  padding-left: 14px;
+  padding-right: 14px;
 }
