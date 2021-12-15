@@ -76,3 +76,14 @@
   resize: none;
   margin-bottom: 24px;
 }
+
+.confirmButtonWrapper {
+  width: 100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modalMessage {
+  font-size: 20px;
+  line-height: 30px;
+}

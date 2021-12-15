@@ -47,3 +47,28 @@
   padding-left: 14px;
   padding-right: 14px;
 }
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.modalMessage {
+  font-size: 20px;
+  line-height: 30px;
+  font-family: 400;
+}
+
+.deletedArticle {
+  font-weight: 600;
+  margin-left: 14px;
+}
+
+.modalButtons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+}

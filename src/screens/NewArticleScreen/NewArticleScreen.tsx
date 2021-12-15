@@ -8,6 +8,7 @@ import {
   tenant,
 } from '../../api';
 import { Button } from '../../components/Button/Button';
+import { Modal } from '../../components/Modal/Modal';
 import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
 import { TextInput } from '../../components/TextInput/TextInput';
@@ -40,6 +41,10 @@ export const NewArticleScreen: React.FC<TProps> = () => {
   const [imageSource, setImageSource] = React.useState("")
   const [content, setContent] = React.useState("")
 
+  const [imageError, setImageError] = React.useState("")
+  const [otherErrors, setOtherErrors] = React.useState("")
+  const [showModal, setShowModal] = React.useState(false)
+
   const navigate = useNavigate()
 
   const fileSelectedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,25 +63,31 @@ export const NewArticleScreen: React.FC<TProps> = () => {
 
   const uploadImage = async () => {
     const formData = new FormData()
-    if (image) formData.append("image", image)
-    try {
-      const response = await axios.post<TUploadImageSuccess>(
-        `${API.server}${API.endpoints.IMAGES}`,
-        formData,
-        {
-          headers: headers,
-        }
-      )
-      console.log(response)
-      return response
-    } catch (err) {
-      console.log("uploadImageError: ", err)
+    if (image) {
+      setImageError("")
+      formData.append("image", image)
+      try {
+        const response = await axios.post<TUploadImageSuccess>(
+          `${API.server}${API.endpoints.IMAGES}`,
+          formData,
+          {
+            headers: headers,
+          }
+        )
+        return response
+      } catch (err) {
+        console.log("uploadImageError: ", err)
+      }
+    } else {
+      setImageError("You forgot to upload and image!")
+      setShowModal(true)
     }
   }
 
   const postArticle = async () => {
     const imageResponse = await uploadImage()
-    if (imageResponse) {
+    if (imageResponse && title.length > 0 && perex.length > 0 && content.length > 0) {
+      setOtherErrors("")
       try {
         const response = await axios.post(
           `${API.server}${API.endpoints.ARTICLES}`,
@@ -94,6 +105,9 @@ export const NewArticleScreen: React.FC<TProps> = () => {
       } catch (err) {
         console.log("postingArticleError: ", err)
       }
+    } else {
+      setOtherErrors("All input fields must contain at least one character!")
+      setShowModal(true)
     }
   }
 
@@ -101,6 +115,13 @@ export const NewArticleScreen: React.FC<TProps> = () => {
 
   return (
     <Screen loggedIn={authContext.token ? true : false}>
+      <Modal onModalClose={() => setShowModal(false)} show={showModal}>
+        <p className={classes.modalMessage}>{imageError && imageError}</p>
+        <p className={classes.modalMessage}>{otherErrors && otherErrors}</p>
+        <div className={classes.confirmButtonWrapper}>
+          <Button color="primary" onClick={() => setShowModal(false)} title="Got it" />
+        </div>
+      </Modal>
       <div className={classes.page}>
         <div className={classes.headingRow}>
           <ScreenHeading title="Create new article" />

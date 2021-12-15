@@ -9,6 +9,7 @@ import {
 } from '../../api';
 import { ReactComponent as Controls } from '../../assets/Union.svg';
 import { Button } from '../../components/Button/Button';
+import { Modal } from '../../components/Modal/Modal';
 import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
 import { TableRow } from '../../components/TableRow/TableRow';
@@ -19,6 +20,12 @@ import classes from './MyArticlesScreen.module.css';
 
 type TProps = NoChildren
 
+interface IDeletedArticle {
+  title: string
+  id: string
+  imageId: string
+}
+
 export const MyArticlesScreen: React.FC<TProps> = () => {
   const authContext = useAuthContext()
   const navigate = useNavigate()
@@ -27,18 +34,27 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
     IArticleDetail[]
   >([])
 
-  let headers = {}
-  if (authContext.token) {
-    headers = {
-      "X-API-KEY": tenant.apiKey,
-      Authorization: authContext.token?.accessToken,
+  const getHeaders = React.useMemo(() => {
+    if (authContext.token) {
+      return {
+        "X-API-KEY": tenant.apiKey,
+        Authorization: authContext.token?.accessToken,
+      }
     }
-  }
+  }, [authContext.token])
 
   // sorting states (eg. by comments ASCENDING)
   const [commentsASC, setCommentsASC] = React.useState(false)
   const [titleASC, setTitleASC] = React.useState(false)
   const [perexASC, setPerexASC] = React.useState(false)
+
+  const [showModal, setShowModal] = React.useState(false)
+
+  const [deletedArticle, setDeletedArticle] = React.useState<IDeletedArticle>({
+    title: "",
+    id: "",
+    imageId: "",
+  })
 
   React.useEffect(() => {
     const getArticles = async () => {
@@ -46,7 +62,7 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
         const response = await axios.get<IArticlesResponse>(
           `${API.server}${API.endpoints.ARTICLES}`,
           {
-            headers: headers,
+            headers: getHeaders,
           }
         )
         const articles: IArticleDetail[] = []
@@ -55,7 +71,7 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
             const articleDetailResponse = await axios.get<IArticleDetail>(
               `${API.server}${API.endpoints.ARTICLES}/${response.data.items[i].articleId}`,
               {
-                headers: headers,
+                headers: getHeaders,
               }
             )
             articles.push(articleDetailResponse.data)
@@ -70,10 +86,11 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
     }
 
     getArticles()
-  }, [])
+  }, [getHeaders])
 
-  const handleDelete = (id: string) => {
-    console.log("deleting article #: ", id)
+  const handleDelete = (id: string, title: string, imageId: string) => {
+    setDeletedArticle({ title: title, id: id, imageId: imageId })
+    setShowModal(true)
   }
 
   const handleEdit = (id: string) => {
@@ -136,8 +153,50 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
     }
   }
 
+  const deleteArticle = async () => {
+    try {
+      // first deleting an image
+      const responseImageDeleted = await axios.delete(
+        `${API.server}${API.endpoints.IMAGES}/${deletedArticle.imageId}`,
+        {
+          headers: getHeaders,
+        }
+      )
+      // now deleting an article
+      const responseArticleDeleted = await axios.delete(
+        `${API.server}${API.endpoints.ARTICLES}/${deletedArticle.id}`,
+        {
+          headers: getHeaders,
+        }
+      )
+
+      if (responseArticleDeleted.status === 204 && responseImageDeleted.status === 204) {
+        const currentArticles = [...articlesListWithCommentsCount]
+        const newArticles = currentArticles.filter(
+          (article) => article.articleId !== deletedArticle.id
+        )
+        setArticlesListWithCommentsCount(newArticles)
+      }
+      setShowModal(false)
+    } catch (err) {
+      console.log("error when deleting article: ", err)
+    }
+  }
+
   return (
     <Screen loggedIn={authContext.token ? true : false}>
+      <Modal onModalClose={() => setShowModal(false)} show={showModal}>
+        <div className={classes.modalBody}>
+          <p className={classes.modalMessage}>
+            Do you really want to delete article:
+            <span className={classes.deletedArticle}>{deletedArticle.title}</span>
+          </p>
+          <div className={classes.modalButtons}>
+            <Button color="primary" title="Delete" onClick={() => deleteArticle()} />
+            <Button color="secondary" title="Cancel" onClick={() => setShowModal(false)} />
+          </div>
+        </div>
+      </Modal>
       <div className={classes.page}>
         <div className={classes.headingRow}>
           <ScreenHeading title="My articles" />
@@ -185,10 +244,10 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
                     key={article.articleId}
                     author={tenant.name}
                     comments={article.comments.length}
-                    onDelete={() => handleDelete(article.articleId)}
+                    onDelete={() => handleDelete(article.articleId, article.title, article.imageId)}
                     onEdit={() => handleEdit(article.articleId)}
                     perex={article.perex.slice(0, 60) + "..."}
-                    title={article.title}
+                    title={article.title.slice(0, 25) + "..."}
                   />
                 )
               })}
