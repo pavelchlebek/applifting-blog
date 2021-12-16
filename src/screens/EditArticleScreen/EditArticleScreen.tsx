@@ -1,7 +1,10 @@
 import React from 'react';
 
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 
 import {
   API,
@@ -13,7 +16,8 @@ import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
 import { TextInput } from '../../components/TextInput/TextInput';
 import { useAuthContext } from '../../store/auth-context';
-import classes from './NewArticleScreen.module.css';
+import { IArticleDetail } from '../ArticleDetailScreen/ArticleDetailScreen';
+import classes from './EditArticleScreen.module.css';
 
 type TProps = NoChildren
 
@@ -24,22 +28,28 @@ interface IImageData {
 
 type TUploadImageSuccess = IImageData[]
 
-export const NewArticleScreen: React.FC<TProps> = () => {
+export const EditArticleScreen: React.FC<TProps> = () => {
   const authContext = useAuthContext()
 
-  let headers = {}
-  if (authContext.token) {
-    headers = {
-      "X-API-KEY": tenant.apiKey,
-      Authorization: authContext.token?.accessToken,
+  const params = useParams()
+  const articleId = params.articleId
+
+  const getHeaders = React.useMemo(() => {
+    if (authContext.token) {
+      return {
+        "X-API-KEY": tenant.apiKey,
+        Authorization: authContext.token?.accessToken,
+      }
     }
-  }
+  }, [authContext.token])
 
   const [title, setTitle] = React.useState("")
   const [perex, setPerex] = React.useState("")
   const [image, setImage] = React.useState<File | Blob | undefined>()
   const [imageSource, setImageSource] = React.useState("")
   const [content, setContent] = React.useState("")
+
+  const [originalImageId, setOriginalImageId] = React.useState("")
 
   const [imageError, setImageError] = React.useState("")
   const [otherErrors, setOtherErrors] = React.useState("")
@@ -71,7 +81,7 @@ export const NewArticleScreen: React.FC<TProps> = () => {
           `${API.server}${API.endpoints.IMAGES}`,
           formData,
           {
-            headers: headers,
+            headers: getHeaders,
           }
         )
         return response
@@ -90,8 +100,8 @@ export const NewArticleScreen: React.FC<TProps> = () => {
       setOtherErrors("")
       try {
         if (imageResponse) {
-          const response = await axios.post(
-            `${API.server}${API.endpoints.ARTICLES}`,
+          const response = await axios.patch(
+            `${API.server}${API.endpoints.ARTICLES}/${articleId}`,
             {
               title: title,
               perex: perex,
@@ -99,7 +109,7 @@ export const NewArticleScreen: React.FC<TProps> = () => {
               content: content,
             },
             {
-              headers: headers,
+              headers: getHeaders,
             }
           )
           navigate("/my-articles")
@@ -115,6 +125,63 @@ export const NewArticleScreen: React.FC<TProps> = () => {
 
   const inputImageRef = React.useRef<HTMLInputElement>(null)
 
+  // fetching article to be edited
+  React.useEffect(() => {
+    const getPicture = async (imageId: string) => {
+      try {
+        const response = await axios.get(`${API.server}${API.endpoints.IMAGES}/${imageId}`, {
+          headers: getHeaders,
+          responseType: "blob",
+        })
+        const imageString = response.data
+        const reader = new FileReader()
+        reader.readAsDataURL(imageString)
+        reader.onload = () => {
+          const imageDataUrl = reader.result
+          if (typeof imageDataUrl === "string") {
+            setImageSource(imageDataUrl)
+          }
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    const getArticle = async () => {
+      try {
+        const response = await axios.get<IArticleDetail>(
+          `${API.server}${API.endpoints.ARTICLES}/${articleId}`,
+          {
+            headers: getHeaders,
+          }
+        )
+        getPicture(response.data.imageId)
+        // setArticleDetail(response.data)
+        // setting individual inputs
+        setTitle(response.data.title)
+        setPerex(response.data.perex)
+        setContent(response.data.content)
+        setOriginalImageId(response.data.imageId)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getArticle()
+  }, [articleId, getHeaders])
+
+  const handleDeleteImage = async () => {
+    try {
+      const response = await axios.delete(
+        `${API.server}${API.endpoints.IMAGES}/${originalImageId}`,
+        {
+          headers: getHeaders,
+        }
+      )
+      if (response.status === 204) setImageSource("")
+    } catch (err) {
+      console.log("error while deleting image: ", err)
+    }
+  }
+
   return (
     <Screen loggedIn={authContext.token ? true : false}>
       <Modal onModalClose={() => setShowModal(false)} show={showModal}>
@@ -126,7 +193,7 @@ export const NewArticleScreen: React.FC<TProps> = () => {
       </Modal>
       <div className={classes.page}>
         <div className={classes.headingRow}>
-          <ScreenHeading title="Create new article" />
+          <ScreenHeading title="Edit article" />
           <div className={classes.buttonWrapper}>
             <Button color="primary" title="Publish Article" onClick={() => postArticle()} />
           </div>
@@ -151,16 +218,21 @@ export const NewArticleScreen: React.FC<TProps> = () => {
           type="file"
           onChange={(e) => fileSelectedHandler(e)}
         />
+        {imageSource && <img className={classes.displayImage} src={imageSource} alt="Upload" />}
         <div className={classes.imageContainer}>
           <Button
             style={{ width: "147px" }}
             color="secondary"
-            title="Upload an Image"
+            title="Upload new"
             onClick={() => inputImageRef.current?.click()}
           />
-          {/* <div className={classes.imageFileName}>{image?.name}</div> */}
+          <Button
+            style={{ marginLeft: "17px" }}
+            color="primary"
+            onClick={() => handleDeleteImage()}
+            title="Delete"
+          />
         </div>
-        {imageSource && <img className={classes.displayImage} src={imageSource} alt="Upload" />}
         <h4 className={classes.label + " " + classes.extraMarginTop}>Content</h4>
         <textarea
           placeholder="Supports markdown. Yay!"

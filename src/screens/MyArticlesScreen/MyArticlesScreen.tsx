@@ -94,7 +94,7 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
   }
 
   const handleEdit = (id: string) => {
-    console.log("editing article #: ", id)
+    navigate(`../edit-article/${id}`)
   }
 
   const sortByCommentsAmount = () => {
@@ -155,13 +155,16 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
 
   const deleteArticle = async () => {
     try {
-      // first deleting an image
-      const responseImageDeleted = await axios.delete(
-        `${API.server}${API.endpoints.IMAGES}/${deletedArticle.imageId}`,
-        {
-          headers: getHeaders,
-        }
-      )
+      // first deleting an image if exists
+      if (deletedArticle.imageId) {
+        const responseImageDeleted = await axios.delete(
+          `${API.server}${API.endpoints.IMAGES}/${deletedArticle.imageId}`,
+          {
+            headers: getHeaders,
+          }
+        )
+      }
+
       // now deleting an article
       const responseArticleDeleted = await axios.delete(
         `${API.server}${API.endpoints.ARTICLES}/${deletedArticle.id}`,
@@ -170,7 +173,7 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
         }
       )
 
-      if (responseArticleDeleted.status === 204 && responseImageDeleted.status === 204) {
+      if (responseArticleDeleted.status === 204) {
         const currentArticles = [...articlesListWithCommentsCount]
         const newArticles = currentArticles.filter(
           (article) => article.articleId !== deletedArticle.id

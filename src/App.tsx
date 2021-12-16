@@ -11,6 +11,9 @@ import {
   ArticleDetailScreen,
 } from './screens/ArticleDetailScreen/ArticleDetailScreen';
 import { ArticlesScreen } from './screens/ArticlesScreen/ArticlesScreen';
+import {
+  EditArticleScreen,
+} from './screens/EditArticleScreen/EditArticleScreen';
 import { FileToImage } from './screens/FileToImage';
 import { LoginScreen } from './screens/LoginScreen/LoginScreen';
 import { MarkdownEditor } from './screens/MarkdownEditor';
@@ -31,6 +34,7 @@ function App() {
           <Route path="/article-detail/:articleId" element={<ArticleDetailScreen />} />
           <Route path="/new-article" element={<NewArticleScreen />} />
           <Route path="/my-articles" element={<MyArticlesScreen />} />
+          <Route path="/edit-article/:articleId" element={<EditArticleScreen />} />
           <Route
             path="*"
             element={

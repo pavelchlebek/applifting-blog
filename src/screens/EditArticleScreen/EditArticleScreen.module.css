@@ -1,0 +1,89 @@
+.page {
+  width: 760px;
+  /* border: 1px solid #ccc; */
+  box-sizing: border-box;
+}
+
+.headingRow {
+  margin-top: 60px;
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.buttonWrapper {
+  margin-left: 44px;
+}
+
+.label {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+}
+
+.perexBody {
+  width: 100%;
+  height: 130px;
+  outline: none;
+  font-size: 20px;
+  line-height: 30px;
+  font-family: 400;
+  padding: 16px;
+  font-family: inherit;
+  border: 1px solid #dfdfdf;
+  border-radius: 4px;
+  resize: none;
+  margin-bottom: 24px;
+}
+
+.fileInput {
+  background-color: aquamarine;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+}
+
+.imageFileName {
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+.displayImage {
+  margin-top: 8px;
+  width: 185px;
+  border-radius: 4px;
+}
+
+.extraMarginTop {
+  margin-top: 30px;
+}
+
+.contentBody {
+  width: 100%;
+  height: 948px;
+  outline: none;
+  font-size: 20px;
+  line-height: 30px;
+  font-family: 400;
+  padding: 16px;
+  font-family: inherit;
+  border: 1px solid #dfdfdf;
+  border-radius: 4px;
+  resize: none;
+  margin-bottom: 24px;
+}
+
+.confirmButtonWrapper {
+  width: 100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modalMessage {
+  font-size: 20px;
+  line-height: 30px;
+}
