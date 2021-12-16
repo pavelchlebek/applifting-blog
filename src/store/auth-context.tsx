@@ -13,6 +13,7 @@ type TAuthContextObject = {
   name: string
   login: (username: string, password: string) => void
   logout: () => void
+  setOnLoginError: (error: ILoginError | undefined) => void
   token: TToken | undefined
   loginError: ILoginError | undefined
 }
@@ -26,6 +27,7 @@ const AuthContext = React.createContext<TAuthContextObject>({
   name: "",
   login: () => {},
   logout: () => {},
+  setOnLoginError: () => {},
   token: { expiresIn: 0, accessToken: "" },
   loginError: { code: "", message: "" },
 })
@@ -106,7 +108,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         TOKEN_EXPIRES_IN,
         (new Date().getTime() + response.data.expires_in * millisecondsInSecond).toString()
       )
-      navigate("/articles")
+      navigate("/my-articles")
     } catch (err) {
       if (axios.isAxiosError(err)) {
         if (err.response) {
@@ -115,6 +117,10 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         }
       }
     }
+  }
+
+  const setOnLoginError = (error: ILoginError | undefined) => {
+    setLoginError(error)
   }
 
   const logout = () => {
@@ -128,6 +134,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     name: tenant.name,
     login: login,
     logout: logout,
+    setOnLoginError: setLoginError,
     token: token,
     loginError: loginError,
   }
