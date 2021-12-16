@@ -90,8 +90,8 @@ export const EditArticleScreen: React.FC<TProps> = () => {
         console.log("uploadImageError: ", err)
       }
     } else {
-      setImageError("You forgot to upload and image!")
-      setShowModal(true)
+      // setImageError("You forgot to upload and image!")
+      // setShowModal(true)
     }
   }
 
@@ -100,21 +100,19 @@ export const EditArticleScreen: React.FC<TProps> = () => {
     if (title.length > 0 && perex.length > 0 && content.length > 0) {
       setOtherErrors("")
       try {
-        if (imageResponse) {
-          const response = await axios.patch(
-            `${API.server}${API.endpoints.ARTICLES}/${articleId}`,
-            {
-              title: title,
-              perex: perex,
-              imageId: imageResponse.data[0].imageId,
-              content: content,
-            },
-            {
-              headers: getHeaders,
-            }
-          )
-          navigate("/my-articles")
-        }
+        const response = await axios.patch(
+          `${API.server}${API.endpoints.ARTICLES}/${articleId}`,
+          {
+            title: title,
+            perex: perex,
+            imageId: imageResponse && imageResponse.data[0].imageId,
+            content: content,
+          },
+          {
+            headers: getHeaders,
+          }
+        )
+        navigate("/my-articles")
       } catch (err) {
         console.log("postingArticleError: ", err)
       }

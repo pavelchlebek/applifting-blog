@@ -27,7 +27,7 @@ export const Toolbar: React.FC<TProps> = ({ loggedIn }) => {
         <div className={classes.leftSection}>
           <img className={classes.logo} src={logo} alt="logo" />
           <ul className={classes.nav}>
-            <NavItem to="/articles" color="secondary">
+            <NavItem to="/" color="secondary">
               Recent articles
             </NavItem>
             <NavItem to="/screen" color="secondary">

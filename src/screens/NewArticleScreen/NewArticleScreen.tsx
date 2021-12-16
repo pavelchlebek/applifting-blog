@@ -16,6 +16,7 @@ import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
 import { TextInput } from '../../components/TextInput/TextInput';
 import { useAuthContext } from '../../store/auth-context';
+import { IArticleWithImageId } from '../ArticlesScreen/ArticlesScreen';
 import classes from './NewArticleScreen.module.css';
 
 type TProps = NoChildren
@@ -47,6 +48,9 @@ export const NewArticleScreen: React.FC<TProps> = () => {
   const [imageError, setImageError] = React.useState("")
   const [otherErrors, setOtherErrors] = React.useState("")
   const [showModal, setShowModal] = React.useState(false)
+
+  const [showUploadMessage, setShowUploadMessage] = React.useState(false)
+  const [newArticleId, setNewArticleId] = React.useState("")
 
   const navigate = useNavigate()
 
@@ -93,7 +97,7 @@ export const NewArticleScreen: React.FC<TProps> = () => {
       setOtherErrors("")
       try {
         if (imageResponse) {
-          const response = await axios.post(
+          const response = await axios.post<IArticleWithImageId>(
             `${API.server}${API.endpoints.ARTICLES}`,
             {
               title: title,
@@ -105,7 +109,9 @@ export const NewArticleScreen: React.FC<TProps> = () => {
               headers: headers,
             }
           )
-          navigate("/my-articles")
+          setNewArticleId(response.data.articleId)
+          setShowUploadMessage(true)
+          // navigate("/my-articles")
         }
       } catch (err) {
         console.log("postingArticleError: ", err)
@@ -114,6 +120,11 @@ export const NewArticleScreen: React.FC<TProps> = () => {
       setOtherErrors("All input fields must contain at least one character!")
       setShowModal(true)
     }
+  }
+
+  const handleProceed = () => {
+    setShowUploadMessage(false)
+    navigate("../my-articles")
   }
 
   const inputImageRef = React.useRef<HTMLInputElement>(null)
@@ -127,6 +138,14 @@ export const NewArticleScreen: React.FC<TProps> = () => {
         <p className={classes.modalMessage}>{otherErrors && otherErrors}</p>
         <div className={classes.confirmButtonWrapper}>
           <Button color="primary" onClick={() => setShowModal(false)} title="Got it" />
+        </div>
+      </Modal>
+      <Modal onModalClose={() => setShowUploadMessage(false)} show={showUploadMessage}>
+        <p
+          className={classes.modalMessage}
+        >{`Article: ${title} with id: ${newArticleId} was created!`}</p>
+        <div className={classes.confirmButtonWrapper}>
+          <Button color="primary" onClick={handleProceed} title="Got it" />
         </div>
       </Modal>
       <div className={classes.page}>

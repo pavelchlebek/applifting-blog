@@ -26,11 +26,11 @@ function App() {
     <BrowserRouter>
       <AuthContextProvider>
         <Routes>
-          <Route path="/" element={<FileToImage />} />
+          <Route path="/fileToImage" element={<FileToImage />} />
           <Route path="/articlesTest" element={<ArticlesScreen />} />
           <Route path="/editor" element={<MarkdownEditor />} />
           <Route path="/login" element={<LoginScreen />} />
-          <Route path="/articles" element={<ArticlesScreen />} />
+          <Route path="/" element={<ArticlesScreen />} />
           <Route path="/article-detail/:articleId" element={<ArticleDetailScreen />} />
           <Route path="/new-article" element={<NewArticleScreen />} />
           <Route path="/my-articles" element={<MyArticlesScreen />} />
