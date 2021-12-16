@@ -2,6 +2,7 @@ import React from 'react';
 
 import axios from 'axios';
 import {
+  Navigate,
   useNavigate,
   useParams,
 } from 'react-router-dom';
@@ -181,6 +182,8 @@ export const EditArticleScreen: React.FC<TProps> = () => {
       console.log("error while deleting image: ", err)
     }
   }
+
+  if (!authContext.token) return <Navigate to="../articles" />
 
   return (
     <Screen loggedIn={authContext.token ? true : false}>

@@ -1,7 +1,10 @@
 import React from 'react';
 
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {
+  Navigate,
+  useNavigate,
+} from 'react-router-dom';
 
 import {
   API,
@@ -185,6 +188,8 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
       console.log("error when deleting article: ", err)
     }
   }
+
+  if (!authContext.token) return <Navigate to="../articles" />
 
   return (
     <Screen loggedIn={authContext.token ? true : false}>
