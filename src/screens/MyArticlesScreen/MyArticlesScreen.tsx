@@ -15,6 +15,7 @@ import { Button } from '../../components/Button/Button';
 import { Modal } from '../../components/Modal/Modal';
 import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
+import { Spinner } from '../../components/Spinner/Spinner';
 import { TableRow } from '../../components/TableRow/TableRow';
 import { useAuthContext } from '../../store/auth-context';
 import { IArticleDetail } from '../ArticleDetailScreen/ArticleDetailScreen';
@@ -160,12 +161,9 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
     try {
       // first deleting an image if exists
       if (deletedArticle.imageId) {
-        const responseImageDeleted = await axios.delete(
-          `${API.server}${API.endpoints.IMAGES}/${deletedArticle.imageId}`,
-          {
-            headers: getHeaders,
-          }
-        )
+        await axios.delete(`${API.server}${API.endpoints.IMAGES}/${deletedArticle.imageId}`, {
+          headers: getHeaders,
+        })
       }
 
       // now deleting an article
@@ -189,7 +187,7 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
     }
   }
 
-  if (!authContext.token) return <Navigate to="../articles" />
+  if (!authContext.token) return <Navigate to="/" />
 
   return (
     <Screen loggedIn={authContext.token ? true : false}>
@@ -245,7 +243,7 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
             </tr>
           </thead>
           <tbody>
-            {articlesListWithCommentsCount.length > 0 &&
+            {articlesListWithCommentsCount.length > 0 ? (
               articlesListWithCommentsCount.map((article) => {
                 return (
                   <TableRow
@@ -258,7 +256,10 @@ export const MyArticlesScreen: React.FC<TProps> = () => {
                     title={article.title.slice(0, 25) + "..."}
                   />
                 )
-              })}
+              })
+            ) : (
+              <Spinner />
+            )}
           </tbody>
         </table>
       </div>

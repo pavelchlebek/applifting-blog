@@ -119,10 +119,6 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     }
   }
 
-  const setOnLoginError = (error: ILoginError | undefined) => {
-    setLoginError(error)
-  }
-
   const logout = () => {
     setToken(undefined)
     localStorage.removeItem(ACCESS_TOKEN)

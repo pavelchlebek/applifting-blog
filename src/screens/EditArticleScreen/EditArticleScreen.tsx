@@ -100,7 +100,7 @@ export const EditArticleScreen: React.FC<TProps> = () => {
     if (title.length > 0 && perex.length > 0 && content.length > 0) {
       setOtherErrors("")
       try {
-        const response = await axios.patch(
+        await axios.patch(
           `${API.server}${API.endpoints.ARTICLES}/${articleId}`,
           {
             title: title,
@@ -181,7 +181,7 @@ export const EditArticleScreen: React.FC<TProps> = () => {
     }
   }
 
-  if (!authContext.token) return <Navigate to="../articles" />
+  if (!authContext.token) return <Navigate to="/" />
 
   return (
     <Screen loggedIn={authContext.token ? true : false}>

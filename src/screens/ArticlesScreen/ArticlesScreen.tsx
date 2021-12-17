@@ -10,6 +10,7 @@ import {
 import { Article } from '../../components/Article/Article';
 import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
+import { Spinner } from '../../components/Spinner/Spinner';
 import { useAuthContext } from '../../store/auth-context';
 import classes from './ArticlesScreen.module.css';
 
@@ -41,7 +42,6 @@ export const ArticlesScreen: React.FC<TProps> = () => {
   const [articlesList, setArticlesList] = React.useState<IArticleWithImageId[]>([])
 
   const authContext = useAuthContext()
-  // console.log("Auth Context: ", authContext)
 
   const navigate = useNavigate()
 
@@ -74,7 +74,7 @@ export const ArticlesScreen: React.FC<TProps> = () => {
         <div className={classes.heading}>
           <ScreenHeading title="Recent articles" />
         </div>
-        {articlesList &&
+        {articlesList.length > 0 ? (
           articlesList
             .sort(
               (a, b) => new Date(b.lastUpdatedAt).getTime() - new Date(a.lastUpdatedAt).getTime()
@@ -91,7 +91,10 @@ export const ArticlesScreen: React.FC<TProps> = () => {
                   onClick={() => goToDetails(article.articleId)}
                 />
               )
-            })}
+            })
+        ) : (
+          <Spinner />
+        )}
       </div>
     </Screen>
   )

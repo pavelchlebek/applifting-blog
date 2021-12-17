@@ -30,7 +30,7 @@ export const Toolbar: React.FC<TProps> = ({ loggedIn }) => {
             <NavItem to="/" color="secondary">
               Recent articles
             </NavItem>
-            <NavItem to="/screen" color="secondary">
+            <NavItem to="/about" color="secondary">
               About
             </NavItem>
           </ul>

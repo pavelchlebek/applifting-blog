@@ -129,7 +129,7 @@ export const NewArticleScreen: React.FC<TProps> = () => {
 
   const inputImageRef = React.useRef<HTMLInputElement>(null)
 
-  if (!authContext.token) return <Navigate to="../articles" />
+  if (!authContext.token) return <Navigate to="/" />
 
   return (
     <Screen loggedIn={authContext.token ? true : false}>
@@ -141,9 +141,10 @@ export const NewArticleScreen: React.FC<TProps> = () => {
         </div>
       </Modal>
       <Modal onModalClose={() => setShowUploadMessage(false)} show={showUploadMessage}>
-        <p
-          className={classes.modalMessage}
-        >{`Article: ${title} with id: ${newArticleId} was created!`}</p>
+        <p className={classes.modalMessage}>
+          Article: <span className={classes.modalSpan}>{title}</span>with id:{" "}
+          <span className={classes.modalSpan}>{newArticleId}</span>was created!
+        </p>
         <div className={classes.confirmButtonWrapper}>
           <Button color="primary" onClick={handleProceed} title="Got it" />
         </div>

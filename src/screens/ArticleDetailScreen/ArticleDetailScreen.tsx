@@ -16,6 +16,7 @@ import { Button } from '../../components/Button/Button';
 import { Comment } from '../../components/Comment/Comment';
 import { Screen } from '../../components/Screen/Screen';
 import { ScreenHeading } from '../../components/ScreenHeading/ScreenHeading';
+import { Spinner } from '../../components/Spinner/Spinner';
 import { TextInput } from '../../components/TextInput/TextInput';
 import { useAuthContext } from '../../store/auth-context';
 import {
@@ -202,7 +203,7 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
   return (
     <Screen loggedIn={authContext.token ? true : false}>
       <div className={classes.page}>
-        {articleDetail && (
+        {articleDetail ? (
           <div className={classes.left}>
             {/* <div>{authContext.name}</div> */}
             {/* <Button
@@ -277,6 +278,8 @@ export const ArticleDetailScreen: React.FC<TProps> = () => {
               )}
             </div>
           </div>
+        ) : (
+          <Spinner />
         )}
         <div className={classes.right}>
           <h4 className={classes.smallerHeading + " " + classes.headingRight}>Related articles</h4>
