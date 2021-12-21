@@ -4,6 +4,11 @@
 - run "yarn start" in the root directory
 - app should start in default browser on localhost on port 3000
 
+### credentials
+
+userName: "Palisandr"
+password: "qwertyui"
+
 ## author's solution
 
 - aim was to solve all tasks and subtasks
